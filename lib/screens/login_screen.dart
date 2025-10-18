@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import 'role_selection_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,6 +14,12 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   bool _obscurePassword = true;
   bool _rememberMe = false;
 
+  final _loginEmailController = TextEditingController();
+  final _loginPasswordController = TextEditingController();
+  final _registerNameController = TextEditingController();
+  final _registerEmailController = TextEditingController();
+  final _registerPasswordController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -23,7 +29,48 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   @override
   void dispose() {
     _tabController.dispose();
+    _loginEmailController.dispose();
+    _loginPasswordController.dispose();
+    _registerNameController.dispose();
+    _registerEmailController.dispose();
+    _registerPasswordController.dispose();
     super.dispose();
+  }
+
+  void _handleLogin() {
+    if (_loginEmailController.text.isEmpty || _loginPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Заполните все поля')),
+      );
+      return;
+    }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+    );
+  }
+
+  void _handleRegister() {
+    if (_registerNameController.text.isEmpty ||
+        _registerEmailController.text.isEmpty ||
+        _registerPasswordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Заполните все поля')),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Регистрация успешна!')),
+    );
+
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
+      );
+    });
   }
 
   @override
@@ -146,6 +193,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           label: 'Email',
           hint: 'your@email.com',
           prefixIcon: Icons.email_outlined,
+          controller: _loginEmailController,
         ),
         const SizedBox(height: 20),
         _buildTextField(
@@ -153,6 +201,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           hint: '••••••••',
           obscureText: _obscurePassword,
           prefixIcon: Icons.lock_outline,
+          controller: _loginPasswordController,
           suffixIcon: IconButton(
             icon: Icon(
               _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
@@ -198,7 +247,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               ],
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Ссылка для сброса отправлена на email')),
+                );
+              },
               child: const Text(
                 'Забыли пароль?',
                 style: TextStyle(
@@ -210,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           ],
         ),
         const Spacer(),
-        _buildAuthButton(label: 'Войти'),
+        _buildAuthButton(label: 'Войти', onPressed: _handleLogin),
       ],
     );
   }
@@ -222,12 +275,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           label: 'Имя',
           hint: 'Ваше имя',
           prefixIcon: Icons.person_outline,
+          controller: _registerNameController,
         ),
         const SizedBox(height: 20),
         _buildTextField(
           label: 'Email',
           hint: 'your@email.com',
           prefixIcon: Icons.email_outlined,
+          controller: _registerEmailController,
         ),
         const SizedBox(height: 20),
         _buildTextField(
@@ -235,9 +290,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           hint: '••••••••',
           obscureText: true,
           prefixIcon: Icons.lock_outline,
+          controller: _registerPasswordController,
         ),
         const Spacer(),
-        _buildAuthButton(label: 'Создать аккаунт'),
+        _buildAuthButton(label: 'Создать аккаунт', onPressed: _handleRegister),
         const SizedBox(height: 12),
         Text.rich(
           TextSpan(
@@ -265,6 +321,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     bool obscureText = false,
     required IconData prefixIcon,
     Widget? suffixIcon,
+    TextEditingController? controller,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,6 +342,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             border: Border.all(color: Colors.grey[200]!),
           ),
           child: TextField(
+            controller: controller,
             obscureText: obscureText,
             decoration: InputDecoration(
               hintText: hint,
@@ -305,17 +363,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildAuthButton({required String label}) {
+  Widget _buildAuthButton({required String label, required VoidCallback onPressed}) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-            (Route<dynamic> route) => false,
-          );
-        },
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF9B59B6),
           padding: const EdgeInsets.symmetric(vertical: 18),
@@ -379,10 +431,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Widget _buildSocialButton({required String iconPath, required String label}) {
     return OutlinedButton(
       onPressed: () {
-        Navigator.pushAndRemoveUntil(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (Route<dynamic> route) => false,
+          MaterialPageRoute(builder: (context) => const RoleSelectionScreen()),
         );
       },
       style: OutlinedButton.styleFrom(

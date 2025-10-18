@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
@@ -113,23 +114,14 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> with SingleTick
                       children: [
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.calendar_month, size: 20),
-                            label: const Text('В календарь'),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: const Color(0xFF9B59B6),
-                              side: const BorderSide(color: Color(0xFF9B59B6)),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Ссылка скопирована'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
                             icon: const Icon(Icons.share, size: 20),
                             label: const Text('Поделиться'),
                             style: OutlinedButton.styleFrom(
