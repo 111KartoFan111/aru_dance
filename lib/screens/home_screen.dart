@@ -4,6 +4,7 @@ import 'schedule_screen.dart';
 import 'profile_screen.dart';
 import '../widgets/bottom_nav.dart';
 import '../widgets/image_with_fallback.dart';
+import 'notifications_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -289,8 +290,8 @@ class _HomeContentState extends State<HomeContent> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('₽${_priceRange.start.round()}'),
-                          Text('₽${_priceRange.end.round()}'),
+                          Text('₸${_priceRange.start.round()}'),
+                          Text('₸${_priceRange.end.round()}'),
                         ],
                       ),
                       RangeSlider(
@@ -393,50 +394,58 @@ class _HomeContentState extends State<HomeContent> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Привет! 👋',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                              ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Привет! 👋',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
                             ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Найди свой стиль',
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.5,
-                              ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Найди свой стиль',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
                           ],
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
+                        child: IconButton(
+                          icon: const Icon(Icons.notifications_outlined),
+                          color: const Color(0xFF9B59B6),
+                          onPressed: () {
+                            // Добавленный переход на страницу уведомлений
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const NotificationsScreen(),
                               ),
-                            ],
-                          ),
-                          child: IconButton(
-                            icon: const Icon(Icons.notifications_outlined),
-                            color: const Color(0xFF9B59B6),
-                            onPressed: () {},
-                          ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                     const SizedBox(height: 24),
                     Container(
                       decoration: BoxDecoration(
@@ -788,7 +797,7 @@ class DanceClassCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '₽${danceClass['price']}',
+                    '₸${danceClass['price']}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

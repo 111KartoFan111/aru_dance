@@ -336,7 +336,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
         _buildDetailItem(
           icon: Icons.attach_money,
           title: 'Цена',
-          value: '₽${widget.classDetails['price']}',
+          value: '₸${widget.classDetails['price']}',
           color: const Color(0xFF4CAF50),
         ),
         _buildDetailItem(
@@ -536,7 +536,7 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '₽${widget.classDetails['price']}',
+                  '₸${widget.classDetails['price']}',
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

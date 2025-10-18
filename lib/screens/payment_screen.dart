@@ -364,11 +364,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       child: Column(
         children: [
-          _buildPriceRow('Стоимость занятия', '₽${widget.classDetails['price']}'),
+          _buildPriceRow('Стоимость занятия', '₸${widget.classDetails['price']}'),
           const SizedBox(height: 12),
-          _buildPriceRow('Скидка', '-₽0', color: const Color(0xFF4CAF50)),
+          _buildPriceRow('Скидка', '-₸0', color: const Color(0xFF4CAF50)),
           const SizedBox(height: 12),
-          _buildPriceRow('Сервисный сбор', '₽0'),
+          _buildPriceRow('Сервисный сбор', '₸0'),
           const SizedBox(height: 16),
           Divider(color: Colors.grey[300]),
           const SizedBox(height: 16),
@@ -383,7 +383,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
               Text(
-                '₽${widget.classDetails['price']}',
+                '₸${widget.classDetails['price']}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -476,7 +476,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     const Icon(Icons.lock_outline, color: Colors.white, size: 20),
                     const SizedBox(width: 12),
                     Text(
-                      'Оплатить ₽${widget.classDetails['price']}',
+                      'Оплатить ₸${widget.classDetails['price']}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
