@@ -303,16 +303,6 @@ class _ClassDetailsScreenState extends State<ClassDetailsScreen> {
               ],
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.message_outlined, color: Color(0xFF9B59B6)),
-              onPressed: () {},
-            ),
-          ),
         ],
       ),
     );
