@@ -104,7 +104,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
             ],
           ),
           child: SvgPicture.asset(
-            'assets/images/music.svg',
+            'assets/images/logo.svg',
             height: 56,
             width: 56,
             colorFilter: const ColorFilter.mode(Color(0xFF9B59B6), BlendMode.srcIn),
@@ -112,7 +112,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
         ),
         const SizedBox(height: 32),
         const Text(
-          'DanceFlow',
+          'VIBE',
           style: TextStyle(
             fontSize: 44,
             fontWeight: FontWeight.bold,
