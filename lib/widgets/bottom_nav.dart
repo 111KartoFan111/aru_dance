@@ -13,58 +13,91 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      notchMargin: 6.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          _buildNavItem(
-            context,
-            iconPath: 'assets/images/home.svg',
-            label: 'Главная',
-            screenName: 'home',
-          ),
-          _buildNavItem(
-            context,
-            iconPath: 'assets/images/calendar.svg',
-            label: 'Расписание',
-            screenName: 'schedule',
-          ),
-          _buildNavItem(
-            context,
-            iconPath: 'assets/images/user.svg',
-            label: 'Профиль',
-            screenName: 'profile',
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: const Offset(0, -5),
           ),
         ],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              _buildNavItem(
+                context,
+                iconPath: 'assets/images/home.svg',
+                label: 'Главная',
+                screenName: 'home',
+              ),
+              _buildNavItem(
+                context,
+                iconPath: 'assets/images/calendar.svg',
+                label: 'Расписание',
+                screenName: 'schedule',
+              ),
+              _buildNavItem(
+                context,
+                iconPath: 'assets/images/user.svg',
+                label: 'Профиль',
+                screenName: 'profile',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildNavItem(BuildContext context, {required String iconPath, required String label, required String screenName}) {
     final bool isActive = activeScreen == screenName;
-    final Color color = isActive ? const Color(0xFF9B59B6) : Colors.grey;
 
-    return InkWell(
-      onTap: () => onNavigate(screenName),
-      borderRadius: BorderRadius.circular(30),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            SvgPicture.asset(
-              iconPath,
-              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-              height: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(color: color, fontSize: 12),
-            ),
-          ],
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => onNavigate(screenName),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            gradient: isActive
+                ? const LinearGradient(
+                    colors: [Color(0xFF9B59B6), Color(0xFFD4A5E8)],
+                  )
+                : null,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SvgPicture.asset(
+                iconPath,
+                colorFilter: ColorFilter.mode(
+                  isActive ? Colors.white : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                height: 24,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isActive ? Colors.white : Colors.grey,
+                  fontSize: 12,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

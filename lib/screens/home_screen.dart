@@ -76,47 +76,302 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   int _selectedCategoryIndex = 0;
+  String _searchQuery = '';
+  String _selectedLevel = 'Все';
+  RangeValues _priceRange = const RangeValues(0, 2000);
+  bool _showOnlyPopular = false;
+
+  final List<Map<String, dynamic>> _allDanceClasses = [
+    {
+      'id': '1',
+      'name': 'Хип-хоп для начинающих',
+      'instructor': 'Анна Петрова',
+      'level': 'Начальный',
+      'image': 'https://images.unsplash.com/photo-1609602961949-eddbb90383cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoaXAlMjBob3AlMjBkYW5jZXxlbnwxfHx8fDE3NjA3MjgwNDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': true,
+      'category': 'Современные',
+      'rating': '4.9',
+      'students': '124',
+      'price': 800,
+    },
+    {
+      'id': '2',
+      'name': 'Классический балет',
+      'instructor': 'Елена Соколова',
+      'level': 'Средний',
+      'image': 'https://images.unsplash.com/photo-1495791185843-c73f2269f669?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsZXQlMjBkYW5jZXJ8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': false,
+      'category': 'Классические',
+      'rating': '4.8',
+      'students': '89',
+      'price': 1200,
+    },
+    {
+      'id': '3',
+      'name': 'Сальса для пар',
+      'instructor': 'Карлос Родригес',
+      'level': 'Начальный',
+      'image': 'https://images.unsplash.com/photo-1504609813442-a8924e83f76e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWxzYSUyMGRhbmNpbmd8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': true,
+      'category': 'Латина',
+      'rating': '5.0',
+      'students': '156',
+      'price': 900,
+    },
+    {
+      'id': '4',
+      'name': 'Современный джаз',
+      'instructor': 'Мария Кузнецова',
+      'level': 'Продвинутый',
+      'image': 'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxqYXp6JTIwZGFuY2V8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': false,
+      'category': 'Современные',
+      'rating': '4.7',
+      'students': '67',
+      'price': 1000,
+    },
+    {
+      'id': '5',
+      'name': 'Бачата для начинающих',
+      'instructor': 'Диего Мартинес',
+      'level': 'Начальный',
+      'image': 'https://images.unsplash.com/photo-1547153760-18fc86324498?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWNoYXRhJTIwZGFuY2V8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': true,
+      'category': 'Латина',
+      'rating': '4.9',
+      'students': '143',
+      'price': 850,
+    },
+    {
+      'id': '6',
+      'name': 'Контемпорари',
+      'instructor': 'Ольга Смирнова',
+      'level': 'Средний',
+      'image': 'https://images.unsplash.com/photo-1535525153412-5a42439a210d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb250ZW1wb3JhcnklMjBkYW5jZXxlbnwxfHx8fDE3NjA3MjgwNDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      'popular': false,
+      'category': 'Современные',
+      'rating': '4.6',
+      'students': '72',
+      'price': 950,
+    },
+  ];
+
+  final List<String> _categories = ['Все', 'Современные', 'Классические', 'Латина'];
+
+  List<Map<String, dynamic>> get _filteredClasses {
+    return _allDanceClasses.where((danceClass) {
+      // Фильтр по категории
+      bool categoryMatch = _selectedCategoryIndex == 0 || 
+          danceClass['category'] == _categories[_selectedCategoryIndex];
+      
+      // Фильтр по поиску
+      bool searchMatch = _searchQuery.isEmpty ||
+          danceClass['name'].toString().toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          danceClass['instructor'].toString().toLowerCase().contains(_searchQuery.toLowerCase());
+      
+      // Фильтр по уровню
+      bool levelMatch = _selectedLevel == 'Все' || 
+          danceClass['level'] == _selectedLevel;
+      
+      // Фильтр по цене
+      bool priceMatch = danceClass['price'] >= _priceRange.start && 
+          danceClass['price'] <= _priceRange.end;
+      
+      // Фильтр по популярности
+      bool popularMatch = !_showOnlyPopular || danceClass['popular'] == true;
+      
+      return categoryMatch && searchMatch && levelMatch && priceMatch && popularMatch;
+    }).toList();
+  }
+
+  void _showFilterDialog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) => Container(
+          height: MediaQuery.of(context).size.height * 0.75,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                width: 50,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Фильтры',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setModalState(() {
+                          _selectedLevel = 'Все';
+                          _priceRange = const RangeValues(0, 2000);
+                          _showOnlyPopular = false;
+                        });
+                        setState(() {
+                          _selectedLevel = 'Все';
+                          _priceRange = const RangeValues(0, 2000);
+                          _showOnlyPopular = false;
+                        });
+                      },
+                      child: const Text('Сбросить'),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Уровень',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 10,
+                        children: ['Все', 'Начальный', 'Средний', 'Продвинутый']
+                            .map((level) => FilterChip(
+                                  label: Text(level),
+                                  selected: _selectedLevel == level,
+                                  onSelected: (selected) {
+                                    setModalState(() {
+                                      _selectedLevel = level;
+                                    });
+                                    setState(() {
+                                      _selectedLevel = level;
+                                    });
+                                  },
+                                  selectedColor: const Color(0xFF9B59B6),
+                                  labelStyle: TextStyle(
+                                    color: _selectedLevel == level
+                                        ? Colors.white
+                                        : Colors.black87,
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Ценовой диапазон',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('₽${_priceRange.start.round()}'),
+                          Text('₽${_priceRange.end.round()}'),
+                        ],
+                      ),
+                      RangeSlider(
+                        values: _priceRange,
+                        min: 0,
+                        max: 2000,
+                        divisions: 20,
+                        activeColor: const Color(0xFF9B59B6),
+                        onChanged: (values) {
+                          setModalState(() {
+                            _priceRange = values;
+                          });
+                          setState(() {
+                            _priceRange = values;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Только популярные',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Switch(
+                            value: _showOnlyPopular,
+                            activeColor: const Color(0xFF9B59B6),
+                            onChanged: (value) {
+                              setModalState(() {
+                                _showOnlyPopular = value;
+                              });
+                              setState(() {
+                                _showOnlyPopular = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF9B59B6),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Text(
+                      'Показать ${_filteredClasses.length} классов',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final danceClasses = [
-      {
-        'id': '1',
-        'name': 'Хип-хоп для начинающих',
-        'instructor': 'Анна Петрова',
-        'level': 'Начальный',
-        'image': 'https://images.unsplash.com/photo-1609602961949-eddbb90383cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoaXAlMjBob3AlMjBkYW5jZXxlbnwxfHx8fDE3NjA3MjgwNDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
-        'popular': true,
-        'category': 'Современные',
-        'rating': '4.9',
-        'students': '124',
-      },
-      {
-        'id': '2',
-        'name': 'Классический балет',
-        'instructor': 'Елена Соколова',
-        'level': 'Средний',
-        'image': 'https://images.unsplash.com/photo-1495791185843-c73f2269f669?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWxsZXQlMjBkYW5jZXJ8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        'popular': false,
-        'category': 'Классические',
-        'rating': '4.8',
-        'students': '89',
-      },
-      {
-        'id': '3',
-        'name': 'Сальса для пар',
-        'instructor': 'Карлос Родригес',
-        'level': 'Начальный',
-        'image': 'https://images.unsplash.com/photo-1504609813442-a8924e83f76e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzYWxzYSUyMGRhbmNpbmd8ZW58MXx8fHwxNzYwNzI4MDQwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-        'popular': true,
-        'category': 'Латина',
-        'rating': '5.0',
-        'students': '156',
-      },
-    ];
-
-    final categories = ['Все', 'Современные', 'Классические', 'Латина'];
-
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F7),
       body: SafeArea(
@@ -196,17 +451,25 @@ class _HomeContentState extends State<HomeContent> {
                         ],
                       ),
                       child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value;
+                          });
+                        },
                         decoration: InputDecoration(
                           hintText: 'Найти танцевальный класс...',
                           hintStyle: TextStyle(color: Colors.grey[400]),
                           prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
-                          suffixIcon: Container(
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF9B59B6),
-                              borderRadius: BorderRadius.circular(12),
+                          suffixIcon: GestureDetector(
+                            onTap: _showFilterDialog,
+                            child: Container(
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF9B59B6),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.tune, color: Colors.white, size: 20),
                             ),
-                            child: const Icon(Icons.tune, color: Colors.white, size: 20),
                           ),
                           filled: true,
                           fillColor: Colors.white,
@@ -235,9 +498,12 @@ class _HomeContentState extends State<HomeContent> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Все'),
+                    Text(
+                      '${_filteredClasses.length} найдено',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -249,7 +515,7 @@ class _HomeContentState extends State<HomeContent> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  itemCount: categories.length,
+                  itemCount: _categories.length,
                   itemBuilder: (context, index) {
                     final isSelected = _selectedCategoryIndex == index;
                     return Padding(
@@ -282,7 +548,7 @@ class _HomeContentState extends State<HomeContent> {
                             ],
                           ),
                           child: Text(
-                            categories[index],
+                            _categories[index],
                             style: TextStyle(
                               color: isSelected ? Colors.white : Colors.black87,
                               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
@@ -295,30 +561,60 @@ class _HomeContentState extends State<HomeContent> {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final danceClass = danceClasses[index];
-                    return DanceClassCard(
-                      danceClass: danceClass,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ClassDetailsScreen(
-                              classDetails: danceClass,
+            _filteredClasses.isEmpty
+                ? SliverToBoxAdapter(
+                    child: Container(
+                      margin: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(40),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Ничего не найдено',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[600],
                             ),
                           ),
-                        );
-                      },
-                    );
-                  },
-                  childCount: danceClasses.length,
-                ),
-              ),
-            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Попробуйте изменить фильтры',
+                            style: TextStyle(color: Colors.grey[500]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final danceClass = _filteredClasses[index];
+                          return DanceClassCard(
+                            danceClass: danceClass,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClassDetailsScreen(
+                                    classDetails: danceClass,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        childCount: _filteredClasses.length,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -491,18 +787,13 @@ class DanceClassCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Row(
-                    children: [
-                      Icon(Icons.people_outline, color: Colors.grey[400], size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${danceClass['students']} учеников',
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    '₽${danceClass['price']}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF9B59B6),
+                    ),
                   ),
                 ],
               ),
