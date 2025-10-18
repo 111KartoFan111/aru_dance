@@ -21,6 +21,7 @@ class ProfileScreen extends StatelessWidget {
             color: Colors.black87,
             fontWeight: FontWeight.bold,
             fontSize: 24,
+            height: 1.3,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -92,12 +93,12 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Мария Иванова',
+                  'Nurlankyzy Aru',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'maria.ivanova@email.com',
+                  'Aruaruzhiyee7@gmail.com',
                   style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
                 const SizedBox(height: 8),
