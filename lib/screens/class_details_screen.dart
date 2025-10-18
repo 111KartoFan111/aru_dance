@@ -105,7 +105,7 @@ class ClassDetailsScreen extends StatelessWidget {
       childAspectRatio: 2.5,
       children: [
         _buildDetailItem(icon: Icons.timer_outlined, title: 'Длительность', value: '90 минут'),
-        _buildDetailItem(icon: Icons.attach_money, title: 'Цена', value: '₽800'),
+        _buildDetailItem(icon: Icons.attach_money, title: 'Цена', value: '800'),
         _buildDetailItem(icon: Icons.location_on_outlined, title: 'Место', value: 'Зал №2'),
         _buildDetailItem(icon: Icons.people_outline, title: 'Мест осталось', value: '5 из 15'),
       ],
