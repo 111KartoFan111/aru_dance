@@ -1,16 +1,30 @@
 # aru_vibe_dance_app
 
-A new Flutter project.
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/aru_vibe_dance_app.git
+cd aru_vibe_dance_app
+```
 
-A few resources to get you started if this is your first Flutter project:
+2. Install dependencies
+```bash
+flutter pub get
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. Run the app
+```bash
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Prerequisites
+- Flutter SDK (latest stable version)
+- Android Studio or VS Code with Flutter extension
+- A physical device or emulator
+
+### Build Release Version
+```bash
+flutter build apk --release  # For Android
+flutter build ios --release  # For iOS
+```
