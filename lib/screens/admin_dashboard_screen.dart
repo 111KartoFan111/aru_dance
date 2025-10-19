@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../admin/manage_users_screen.dart';
+import '../admin/manage_classes_screen.dart';
+import '../admin/reports_screen.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -19,11 +22,9 @@ class AdminDashboardScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black87),
+            icon: const Icon(Icons.logout, color: Colors.black87),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Настройки системы')),
-              );
+               Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
             },
           ),
         ],
@@ -35,9 +36,9 @@ class AdminDashboardScreen extends StatelessWidget {
           children: [
             _buildOverviewCards(),
             const SizedBox(height: 24),
-            _buildRecentActivity(),
-            const SizedBox(height: 24),
             _buildManagementSections(context),
+             const SizedBox(height: 24),
+            _buildRecentActivity(),
           ],
         ),
       ),
@@ -90,7 +91,7 @@ class AdminDashboardScreen extends StatelessWidget {
             ),
             _buildStatCard(
               icon: Icons.attach_money,
-              title: 'Доход',
+              title: 'Доход (мес)',
               value: '₸890K',
               change: '+18%',
               changePositive: true,
@@ -210,7 +211,7 @@ class AdminDashboardScreen extends StatelessWidget {
             children: [
               _buildActivityItem(
                 icon: Icons.person_add,
-                title: 'Новый пользователь зарегистрирован',
+                title: 'Новый пользователь',
                 subtitle: 'Иван Петров',
                 time: '5 мин назад',
                 color: Colors.blue,
@@ -219,7 +220,7 @@ class AdminDashboardScreen extends StatelessWidget {
               _buildActivityItem(
                 icon: Icons.class_,
                 title: 'Создан новый класс',
-                subtitle: 'Контемпорари для продвинутых',
+                subtitle: 'Контемпорари',
                 time: '1 час назад',
                 color: Colors.purple,
               ),
@@ -307,41 +308,28 @@ class AdminDashboardScreen extends StatelessWidget {
         _buildManagementCard(
           context,
           icon: Icons.people,
-          title: 'Управление пользователями',
-          subtitle: 'Просмотр и редактирование пользователей',
+          title: 'Пользователи',
+          subtitle: 'Просмотр и редактирование',
           color: Colors.blue,
-        ),
-        const SizedBox(height: 12),
-        _buildManagementCard(
-          context,
-          icon: Icons.person,
-          title: 'Управление инструкторами',
-          subtitle: 'Добавление и редактирование инструкторов',
-          color: Colors.purple,
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageUsersScreen())),
         ),
         const SizedBox(height: 12),
         _buildManagementCard(
           context,
           icon: Icons.class_,
-          title: 'Управление классами',
-          subtitle: 'Создание и редактирование классов',
+          title: 'Классы',
+          subtitle: 'Создание и редактирование',
           color: Colors.green,
+           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ManageClassesScreen())),
         ),
         const SizedBox(height: 12),
         _buildManagementCard(
           context,
           icon: Icons.payment,
           title: 'Финансовые отчеты',
-          subtitle: 'Просмотр статистики и отчетов',
+          subtitle: 'Просмотр статистики',
           color: Colors.orange,
-        ),
-        const SizedBox(height: 12),
-        _buildManagementCard(
-          context,
-          icon: Icons.settings,
-          title: 'Настройки системы',
-          subtitle: 'Конфигурация приложения',
-          color: Colors.grey,
+           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ReportsScreen())),
         ),
       ],
     );
@@ -353,13 +341,11 @@ class AdminDashboardScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required Color color,
+    required VoidCallback onTap,
   }) {
     return InkWell(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Открыто: $title')),
-        );
-      },
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
